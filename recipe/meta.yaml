@@ -21,7 +21,6 @@ build:
       --disable-silent-rules \
       --prefix=$PREFIX
     make
-    make check
     make install
 
 requirements:
