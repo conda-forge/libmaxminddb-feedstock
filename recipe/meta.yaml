@@ -10,18 +10,18 @@ source:
   sha256: b2eea79a96fed77ad4d6c39ec34fed83d45fcb75a31c58956813d58dcf30b19f
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage('libmaxminddb') }}
   skip: true  # [win]
-  script: |
-    ./configure \
-      --disable-debug \
-      --disable-dependency-tracking \
-      --disable-silent-rules \
-      --prefix=$PREFIX
-    make
-    make install
+  script:
+    - "./configure --disable-debug \
+        --disable-dependency-tracking \
+        --disable-silent-rules \
+        --prefix=$PREFIX"
+    - make
+    - make check            # [build_platform == target_platform]
+    - make install
 
 requirements:
   build:
