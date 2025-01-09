@@ -1,5 +1,5 @@
 {% set name = "libmaxminddb" %}
-{% set version = "1.11.0" %}
+{% set version = "1.12.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,18 +7,15 @@ package:
 
 source:
   url: https://github.com/maxmind/libmaxminddb/releases/download/{{ version }}/libmaxminddb-{{ version }}.tar.gz
-  sha256: b2eea79a96fed77ad4d6c39ec34fed83d45fcb75a31c58956813d58dcf30b19f
+  sha256: 30f8dcdbb0df586a2780fcbca5824300d2365734cfbc464ff306751179ef62ce
 
 build:
-  number: 1
+  number: 0
   run_exports:
     - {{ pin_subpackage('libmaxminddb') }}
   skip: true  # [win]
   script:
-    - "./configure --disable-debug \
-        --disable-dependency-tracking \
-        --disable-silent-rules \
-        --prefix=$PREFIX"
+    - "./configure --disable-debug --disable-dependency-tracking --disable-silent-rules --prefix=$PREFIX"
     - make
     - make check            # [build_platform == target_platform]
     - make install
