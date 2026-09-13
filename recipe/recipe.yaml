@@ -14,28 +14,46 @@ source:
 
 build:
   number: 1
-  skip: win
   dynamic_linking:
     overlinking_behavior: error
   script:
-    - ./configure --disable-debug --disable-dependency-tracking --disable-silent-rules --prefix="$PREFIX" --build="$BUILD" --host="$HOST"
-    - make
-    - if: build_platform == target_platform
-      then: make check
-    - make install
+    - if: win
+      then:
+        - cmake -S . -B build -G Ninja %CMAKE_ARGS% -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="%SRC_DIR%/build/bin"
+        - cmake --build build
+        - ctest --test-dir build --output-on-failure
+        - cmake --install build
+      else:
+        - ./configure --disable-debug --disable-dependency-tracking --disable-silent-rules --prefix="$PREFIX" --build="$BUILD" --host="$HOST"
+        - make
+        - if: build_platform == target_platform
+          then: make check
+        - make install
 
 requirements:
   build:
     - ${{ stdlib("c") }}
     - ${{ compiler('c') }}
-    - make
-    - pkg-config
+    - if: win
+      then:
+        - cmake
+        - ninja
+      else:
+        - make
+        - pkg-config
   run_exports:
     - ${{ pin_subpackage('libmaxminddb') }}
 
 tests:
   - script:
-      - mmdblookup -f t/maxmind-db/test-data/GeoIP2-City-Test.mmdb -i 175.16.199.0
+      - if: win
+        # Upstream does not build mmdblookup with MSVC (getopt is unavailable).
+        then:
+          - if not exist %LIBRARY_BIN%\maxminddb.dll exit 1
+          - if not exist %LIBRARY_LIB%\maxminddb.lib exit 1
+          - if not exist %LIBRARY_INC%\maxminddb.h exit 1
+          - if not exist %LIBRARY_INC%\maxminddb_config.h exit 1
+        else: mmdblookup -f t/maxmind-db/test-data/GeoIP2-City-Test.mmdb -i 175.16.199.0
     files:
       source:
         - t/maxmind-db/test-data/GeoIP2-City-Test.mmdb
