@@ -1,0 +1,9 @@
+diff --git a/t/CMakeLists.txt b/t/CMakeLists.txt
+--- a/t/CMakeLists.txt
++++ b/t/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(tap
++add_library(tap STATIC
+   libtap/tap.c
+ )
+ 
