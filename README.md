@@ -16,7 +16,6 @@ the GeoIP2 databases from MaxMind. This is a custom binary format designed to fa
 fast lookups of IP addresses while allowing for great flexibility in the type of
 data associated with an address.
 
-
 Current build status
 ====================
 
