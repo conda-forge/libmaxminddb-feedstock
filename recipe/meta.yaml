@@ -25,6 +25,7 @@ requirements:
     - {{ stdlib("c") }}
     - {{ compiler('c') }}
     - make
+    - pkg-config
 
 test:
   commands:
