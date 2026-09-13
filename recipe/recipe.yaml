@@ -24,7 +24,8 @@ build:
       then:
         - cmake -S . -B build -G Ninja %CMAKE_ARGS% -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="%SRC_DIR%/build/bin"
         - cmake --build build
-        - ctest --test-dir build --output-on-failure
+        - if: build_platform == target_platform
+          then: ctest --test-dir build --output-on-failure
         - cmake --install build
       else:
         - ./configure --disable-debug --disable-dependency-tracking --disable-silent-rules --prefix="$PREFIX" --build="$BUILD" --host="$HOST"
