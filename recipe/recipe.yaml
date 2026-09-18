@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: libmaxminddb
-  version: "1.14.0"
+  version: "1.14.1"
 
 package:
   name: ${{ name }}
@@ -10,13 +10,13 @@ package:
 
 source:
   url: https://github.com/maxmind/libmaxminddb/releases/download/${{ version }}/libmaxminddb-${{ version }}.tar.gz
-  sha256: 65ff92382c71ef6634b8c13e278651a2efa68f1de28ef3c31fc32369fa0bb3e3
+  sha256: ca5c87d41339f8bc4daabb53e8a9356b3c995f2d2419b85d7bff823b2ecc252d
   patches:
     - if: win
       then: static-test-helper.patch
 
 build:
-  number: 1
+  number: 0
   dynamic_linking:
     overlinking_behavior: error
   script:
